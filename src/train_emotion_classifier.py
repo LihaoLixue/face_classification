@@ -10,20 +10,21 @@ from keras.callbacks import CSVLogger, ModelCheckpoint, EarlyStopping
 from keras.callbacks import ReduceLROnPlateau
 from keras.preprocessing.image import ImageDataGenerator
 
-from models.cnn import mini_XCEPTION
-from utils.datasets import DataManager
-from utils.datasets import split_data
-from utils.preprocessor import preprocess_input
+from src.models.cnn import mini_XCEPTION, simple_CNN
+from src.utils.datasets import DataManager
+from src.utils.datasets import split_data
+from src.utils.preprocessor import preprocess_input
 
-# parameters
-batch_size = 32
-num_epochs = 10000
+# parameters 1、定义参数：每个batch的采样本数、训练轮数、输入shape、部分比例分离用于验证、冗长参数、分类个数、patience、loghdf5保存路径
+batch_size = 32    #整数，指定进行梯度下降时每个batch包含的样本数。训练时一个batch的样本会被计算一次梯度下降，使目标函数优化一步。
+num_epochs = 10000 #整数，训练终止时的epoch值，训练将在达到该epoch值时停止，当没有设置initial_epoch时，它就是训练的总轮数，否则训练的总轮数为epochs - inital_epoch
 input_shape = (64, 64, 1)
-validation_split = .2
-verbose = 1
+validation_split = .2  #0~1之间的浮点数，用来指定训练集的一定比例数据作为验证集。验证集将不参与训练，并在每个epoch结束后测试的模型的指标，如损失函数、精确度等。
+verbose = 1  #日志显示，0为不在标准输出流输出日志信息，1为输出进度条记录，2为每个epoch输出一行记录
 num_classes = 7
-patience = 50
+patience = 50  #当monitor不再有改善的时候就会停止训练，这个可以通过patience看出来
 base_path = '../trained_models/emotion_models/'
+
 
 # data generator
 data_generator = ImageDataGenerator(
@@ -40,6 +41,7 @@ model = mini_XCEPTION(input_shape, num_classes)
 model.compile(optimizer='adam', loss='categorical_crossentropy',
               metrics=['accuracy'])
 model.summary()
+print(model.summary())
 
 
 datasets = ['fer2013']

@@ -4,13 +4,13 @@ import cv2
 from keras.models import load_model
 import numpy as np
 
-from utils.datasets import get_labels
-from utils.inference import detect_faces
-from utils.inference import draw_text
-from utils.inference import draw_bounding_box
-from utils.inference import apply_offsets
-from utils.inference import load_detection_model
-from utils.preprocessor import preprocess_input
+from src.utils.datasets import get_labels
+from src.utils.inference import detect_faces
+from src.utils.inference import draw_text
+from src.utils.inference import draw_bounding_box
+from src.utils.inference import apply_offsets
+from src.utils.inference import load_detection_model
+from src.utils.preprocessor import preprocess_input
 
 # parameters for loading data and images
 detection_model_path = '../trained_models/detection_models/haarcascade_frontalface_default.xml'
@@ -34,11 +34,12 @@ emotion_window = []
 # starting video streaming
 cv2.namedWindow('window_frame')
 video_capture = cv2.VideoCapture(0)
-while True:
+while video_capture.isOpened():
     bgr_image = video_capture.read()[1]
     gray_image = cv2.cvtColor(bgr_image, cv2.COLOR_BGR2GRAY)
     rgb_image = cv2.cvtColor(bgr_image, cv2.COLOR_BGR2RGB)
     faces = detect_faces(face_detection, gray_image)
+    print(faces)
 
     for face_coordinates in faces:
 
